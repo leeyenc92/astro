@@ -12,6 +12,10 @@ import SinglePageLayout from "./SinglePageLayout.astro";
 const config = parseTomlToJson("./src/config/config.toml");
 const { table_of_contents } = config.settings.markup;
 
+const strapiUrl = import.meta.env.PROD 
+  ? 'https://your-production-domain.com' 
+  : 'http://localhost:1337';
+
 type sidebarType = {
   enable: boolean;
   sticky: boolean;
@@ -19,7 +23,49 @@ type sidebarType = {
   position?: "left" | "right";
   props?: any; // Add the 'props' property to respective sidebar widgets
 };
+
 type contentType = Section & {
+  // Core content fields
+  title?: string;
+  slug?: string;
+  content?: string;
+  publishedAt?: string;
+  
+  // Strapi media field structure
+  coverImage?: {
+    id?: number;
+    name?: string;
+    alternativeText?: string | null;
+    caption?: string | null;
+    width?: number;
+    height?: number;
+    formats?: {
+      thumbnail?: ImageFormat;
+      small?: ImageFormat;
+      medium?: ImageFormat;
+      large?: ImageFormat;
+      [key: string]: ImageFormat | undefined;
+    };
+    hash?: string;
+    ext?: string;
+    mime?: string;
+    size?: number;
+    url?: string;
+    previewUrl?: string | null;
+    provider?: string;
+    provider_metadata?: any;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+
+  // Categories relation
+  categories?: Array<{
+    id?: number;
+    name?: string;
+    slug?: string;
+  }>;
+
+  // Existing properties
   markdownContent?: Function;
   currentLocale?: string;
   masonry_image?: string;
@@ -29,6 +75,21 @@ type contentType = Section & {
     value: string;
   }[];
 };
+
+type ImageFormat = {
+  name?: string;
+  hash?: string;
+  ext?: string;
+  mime?: string;
+  path?: string | null;
+  width?: number;
+  height?: number;
+  size?: number;
+  sizeInBytes?: number;
+  url?: string;
+};
+
+
 type Props = {
   pageType?: "single" | "list"; // Default is "single"
   sidebar?: sidebarType;
@@ -55,12 +116,20 @@ let Content: any, headings, tocHeadings;
 if (markdownContent && typeof markdownContent === "function")
   ({ Content, headings } = await markdownContent());
 
-// Get Author Details
-let authorEntry = [];
+// Get Author Details from Strapi
+let authorEntry: Record<string, any> = {};
 if (author) {
-  const slug = slugifyyy(author);
-  const entry = await getEntryCTM("author", slug, Astro.currentLocale);
-  authorEntry = entry?.data || [];
+  try {
+    const slug = slugifyyy(author);
+    const response = await fetch(
+      `${strapiUrl}/api/authors?filters[slug][$eq]=${slug}&populate=*`
+    );
+    const authorData = await response.json();
+    authorEntry = authorData.data[0]?.attributes || {};
+  } catch (error) {
+    console.error('Error fetching author:', error);
+    authorEntry = {};
+  }
 }
 
 // Generate table of contents
@@ -97,6 +166,7 @@ const sidebarEnabled = sidebar?.enable;
               ? "order-1"
               : "order-1 lg:order-2",
           ]}>
+
           <ContentList {...contentList} />
         </div>
       )
@@ -121,12 +191,15 @@ const sidebarEnabled = sidebar?.enable;
           sidebar={sidebar}
           style={{ boxShadow }}
           content={{
-            ...content,
+            title: content.title,
+            content: content.content,
+            date: content.publishedAt ? new Date(content.publishedAt).toLocaleDateString(Astro.currentLocale) : "Unknown Date",
+            image: content.coverImage?.url ? `${strapiUrl}${content.coverImage.url}`: '/default-image.jpg',
+            categories: content.categories,
             table_of_contents,
             tocHeadings,
             listIconContent,
-            author: authorEntry,
-            Content,
+            author: authorEntry
           }}
         />
       )

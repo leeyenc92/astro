@@ -41,24 +41,13 @@ const { sticky_header, navigation_button } = config.settings;
 
       <ul
         id="nav-menu"
-        class="navbar hs-dropdown-menu hs-dropdown-open:flex hs-dropdown-open:max-lg:mt-2 has-customized-scrollbar max-lg:absolute hs-dropdown-open:static max-lg:!transform-none lg:!static lg:!transform-none">
-        {main.map((menu) => <NavMenuItem menu={menu} />)}
-        {/* Navigation Button For Small Devices */}
-        {
-          navigation_button.enable && (
-            <li class="max-lg:px-4 max-lg:py-2 lg:hidden" role="menuitem">
-              {navigation_button.enable && (
-                <NavigationButton
-                  isDarkHeader={isDarkHeader}
-                  navigation_button={navigation_button}
-                  navigation_button_label={t("navigation.button_label")}
-                />
-              )}
-            </li>
-          )
-        }
-      </ul>
-
+        class="navbar flex flex-col lg:flex-row gap-4 lg:gap-8 items-start lg:items-center">
+        <li><a href="/" class:list={[ isDarkHeader ? "text-white" : "text-neutral-800", "hover:underline" ]}>Home</a></li>
+        <li><a href="/about/" class:list={[ isDarkHeader ? "text-white" : "text-neutral-800", "hover:underline" ]}>About</a></li>
+        <li><a href="/blog/" class:list={[ isDarkHeader ? "text-white" : "text-neutral-800", "hover:underline" ]}>Blog</a></li>
+        <li><a href="/contact/" class:list={[ isDarkHeader ? "text-white" : "text-neutral-800", "hover:underline" ]}>Contact</a></li>
+    </ul>
+<!-- 
       {/* Language Switcher For Small Devices */}
       {
         config.settings.multilingual.enable && !isCategoryFilteredPage && (
@@ -84,7 +73,7 @@ const { sticky_header, navigation_button } = config.settings;
             )}
           </div>
         )
-      }
+      } -->
       <NavToggleBtn isDarkHeader={isDarkHeader} />
     </div>
   </nav>

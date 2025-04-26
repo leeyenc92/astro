@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 interface InlineSvgProps {
   src: string;
   inlineSvg: true;
-  alt?: string; // Optional if inlineSvg is true
+  alt?: string;
   width?: string;
   height?: string;
   class?: string;
@@ -29,7 +29,6 @@ interface ImageProps {
 
 type Props = InlineSvgProps | ImageProps;
 
-// Destructuring Astro.props to get the component's props
 let {
   src,
   alt,
@@ -43,64 +42,63 @@ let {
   ...rest
 } = Astro.props;
 
-src = `/src/assets${src}`;
+// Detect remote
+const isRemote = src.startsWith("http") || src.startsWith("https");
 
-// Glob pattern to load images from the /src/assets/images folder
+// For local images
+const localSrc = `/src/assets${src}`;
 const images = import.meta.glob(
   "/src/assets/images/**/*.{jpeg,jpg,png,webp,svg,gif}",
 );
-
 const rawSvgs = import.meta.glob("/src/assets/images/**/*.svg", {
   query: "raw",
   import: "default",
 });
 
-// Check if the source path is valid
-const isValidPath = images[src] ? true : false;
-
-// Log a warning message in red if the image is not found
-!isValidPath &&
-  console.error(
-    `\x1b[31mImage not found - ${src}.\x1b[0m Make sure the image is in the /src/assets/images folder.`,
-  );
+const isValidLocal = images[localSrc] ? true : false;
 
 let SVG;
-if (inlineSvg && src.includes(".svg")) {
-  SVG = (await rawSvgs[src]()) as string; // Await resolves the promise to a string
-  SVG = SVG.split("<svg"); // Split at the opening <svg> tag
-
-  if (SVG.length > 1) {
-    // Convert rest object to a string of attributes
-    const attributes = Object.entries(rest)
-      .map(([key, value]) => `${key}="${value}"`)
-      .join(" ");
-
-    // Add the attributes to the <svg> tag
-    SVG[1] = ` data-icon="true" ${attributes} ${SVG[1]}`;
+if (inlineSvg && src.includes(".svg") && !isRemote) {
+  SVG = (await rawSvgs[localSrc]()) as string;
+  if (SVG) {
+    SVG = SVG.split("<svg");
+    if (SVG.length > 1) {
+      const attributes = Object.entries(rest)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(" ");
+      SVG[1] = ` data-icon="true" ${attributes} ${SVG[1]}`;
+    }
+    SVG = SVG.join("<svg");
   }
-
-  // Join the array back into a string
-  SVG = SVG.join("<svg");
 }
 ---
-
-{
-  isValidPath &&
-    (inlineSvg && SVG && src.includes(".svg") ? (
-      <Fragment set:html={SVG} />
-    ) : (
-      // @ts-expect-error
-      <Image
-        style={style}
-        alt={alt || ""}
-        width={width}
-        height={height}
-        formats={formats}
-        loading={loading}
-        decoding={decoding}
-        src={images[src]() as Promise<{ default: ImageMetadata }>}
-        {...{ class: Astro.props.class }}
-        {...rest}
-      />
-    ))
-}
+{inlineSvg && SVG ? (
+  <Fragment set:html={SVG} />
+) : isRemote ? (
+  <img
+    src={src}
+    alt={alt || ""}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decoding}
+    class={Astro.props.class}
+    style={style}
+    {...rest}
+  />
+) : isValidLocal ? (
+  <Image
+    src={images[localSrc]() as Promise<{ default: ImageMetadata }>}
+    alt={alt || ""}
+    width={width}
+    height={height}
+    formats={formats}
+    loading={loading}
+    decoding={decoding}
+    class={Astro.props.class}
+    style={style}
+    {...rest}
+  />
+) : (
+  <div style="color: red;">Image not found: {src}</div>
+)}

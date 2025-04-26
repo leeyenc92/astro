@@ -9,7 +9,10 @@ import Pagination from "@/components/widgets/Pagination.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
 
 const config = parseTomlToJson("./src/config/config.toml");
-
+const strapiUrl = import.meta.env.PROD 
+  ? 'https://your-production-domain.com' 
+  : 'http://localhost:1337';
+  
 type Props = {
   class?: string;
   hasSearch?: boolean;
@@ -27,7 +30,7 @@ type Props = {
   [key: string]: any;
 };
 
-const { class: className, pagination, filter, options, ...rest } = Astro.props;
+const { class: className, pagination, filter, options, items = [],  ...rest } = Astro.props;
 
 const {
   content,
@@ -39,20 +42,59 @@ const {
 
 // Get content list based on content value
 let list = [] as any[];
+let posts = [] as any[];
+let totalPages = 1;
 
 if (content === "portfolio") {
   list = await getCollectionCTM(
     config.settings.portfolio_folder,
     Astro.currentLocale,
   );
-} else if (content === "blog") {
-  list = await getCollectionCTM(
-    config.settings.blog_folder,
-    Astro.currentLocale,
-  );
+}else if (content === "blog") {
+  try {
+    const pageSize = config.settings.pagination || 6;
+    const page = pagination?.currentPage || 1;
+    
+    const response = await fetch(
+      `${strapiUrl}/api/posts?pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate=*&sort[0]=publishedAt:desc`
+    );
+    
+    const { data, meta } = await response.json();
+    
+    type Post = {
+      title: string;
+      publishedAt: string;
+      coverImage?: {
+        url?: string;
+        alternativeText?: string;
+      };
+      categories?: { name: string }[];
+      content?: string;
+      slug: string;
+      id: number;
+    };
+    
+    posts = data.map((post: Post) => ({
+      data: {
+        title: post.title,
+        date: new Date(post.publishedAt).toLocaleDateString(Astro.currentLocale),
+        image: post.coverImage?.url  ? `${strapiUrl}${post.coverImage.url}`: '/images/default-blog.jpg',
+        categories: post.categories?.map(cat => cat.name) || [],
+        excerpt: post.content?.substring(0, 150) + '...' || '',
+        content: post.content
+      },
+      slug: post.slug,
+      id: post.id
+    }));
+    
+    list = posts;
+    totalPages = meta.pagination.pageCount;
+    
+  } catch (error) {
+    console.error('Blog fetch error:', error);
+    list = [];
+  }
 }
-
-let posts = content === "blog" ? list : [];
 
 // Limit content list
 list =
@@ -71,7 +113,6 @@ if (filter?.category) {
 list = sortByDate(list);
 
 // For Blog List Pagination
-let totalPages = Math.ceil(posts?.length / config.settings.pagination);
 if (content === "blog" && pagination?.enable) {
   const indexOfLastPost = pagination?.currentPage * config.settings.pagination;
   const indexOfFirstPost = indexOfLastPost - config.settings.pagination;
@@ -131,13 +172,13 @@ if (content === "blog" && pagination?.enable) {
         )}
       </div>
       {content === "blog" && pagination?.enable && (
-        <Pagination
-          class="pt-8"
-          collection="blog"
-          currentPage={pagination?.currentPage || 1}
-          totalPages={totalPages}
-        />
-      )}
+      <Pagination
+        class="pt-8"
+        collection="blog"
+        currentPage={pagination?.currentPage || 1}
+        totalPages={totalPages}
+      />
+    )}
     </>
   )
 }
