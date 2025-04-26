@@ -4,6 +4,7 @@ import TOC from "./widgets/TableOfContents.astro";
 import ContentMeta from "./widgets/ContentMeta.astro";
 import { markdownify } from "@/lib/utils/textConverter";
 import OptimizedImage from "./utilities/OptimizedImage.astro";
+import RichTextRenderer from "./utilities/RichTextRenderer.astro";
 
 const { content, translations, sidebar, layout, style } = Astro.props;
 const {
@@ -162,19 +163,10 @@ const tocEnabled =
         />
       )
     }
-
+    
     <!-- Main Content -->
-    {
-      Content && (
-        <div
-          class="prose-styles content has-video-modal"
-          {...(!sidebarEnabled && {
-            "data-aos": "fade-up-sm",
-            "data-aos-delay": "200",
-          })}>
-          <Content />
-        </div>
-      )
-    }
+    {content.contentBlocks && (
+      <RichTextRenderer blocks={content.contentBlocks} />
+    )}
   </div>
 </div>

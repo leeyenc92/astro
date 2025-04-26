@@ -42,20 +42,20 @@ let {
   ...rest
 } = Astro.props;
 
-// Detect remote
-const isRemote = src.startsWith("http") || src.startsWith("https");
+// Detect remote images (http/https)
+const isRemote = src.startsWith("http");
 
-// For local images
+// Prepare local paths
 const localSrc = `/src/assets${src}`;
-const images = import.meta.glob(
-  "/src/assets/images/**/*.{jpeg,jpg,png,webp,svg,gif}",
-);
-const rawSvgs = import.meta.glob("/src/assets/images/**/*.svg", {
-  query: "raw",
-  import: "default",
-});
+const images = import.meta.glob("/src/assets/images/**/*.{jpeg,jpg,png,webp,svg,gif}");
+const rawSvgs = import.meta.glob("/src/assets/images/**/*.svg", { query: "raw", import: "default" });
 
-const isValidLocal = images[localSrc] ? true : false;
+const isValidLocal = images[localSrc] !== undefined;
+const localImage = isValidLocal ? (await images[localSrc]()) as { default: ImageMetadata } : null;
+
+// Fix formats type to always be string or array
+const normalizedFormats = Array.isArray(formats) ? formats : formats ? [formats] : ["auto"];
+
 
 let SVG;
 if (inlineSvg && src.includes(".svg") && !isRemote) {
@@ -72,33 +72,37 @@ if (inlineSvg && src.includes(".svg") && !isRemote) {
   }
 }
 ---
+
 {inlineSvg && SVG ? (
   <Fragment set:html={SVG} />
 ) : isRemote ? (
   <img
     src={src}
     alt={alt || ""}
-    width={width}
-    height={height}
+    width={typeof width === "string" ? parseInt(width, 10) : width}
+    height={typeof height === "string" ? parseInt(height, 10) : height}
     loading={loading}
     decoding={decoding}
     class={Astro.props.class}
     style={style}
     {...rest}
   />
-) : isValidLocal ? (
-  <Image
-    src={images[localSrc]() as Promise<{ default: ImageMetadata }>}
-    alt={alt || ""}
-    width={width}
-    height={height}
-    formats={formats}
-    loading={loading}
-    decoding={decoding}
-    class={Astro.props.class}
-    style={style}
-    {...rest}
-  />
+) : isValidLocal && localImage ? (
+  <>
+    {/* @ts-expect-error Astro's Image expects static src, but we use dynamic */}
+    <Image
+      src={localImage.default}
+      alt={alt || ""}
+      width={typeof width === "string" ? parseInt(width, 10) : width}
+      height={typeof height === "string" ? parseInt(height, 10) : height}
+      formats={formats}
+      loading={loading}
+      decoding={decoding}
+      class={Astro.props.class}
+      style={style}
+      {...rest}
+    />
+  </>
 ) : (
   <div style="color: red;">Image not found: {src}</div>
 )}

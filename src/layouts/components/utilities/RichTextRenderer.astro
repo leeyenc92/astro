@@ -1,0 +1,35 @@
+---
+const { blocks } = Astro.props;
+---
+
+{
+  blocks.map((block: any) =>
+    block.type === "paragraph" ? (
+      <p>
+        {block.children.map((child: any, i: number) =>
+          child.bold ? (
+            <strong>{child.text}</strong>
+          ) : child.italic ? (
+            <em>{child.text}</em>
+          ) : child.underline ? (
+            <u>{child.text}</u>
+          ) : child.href ? (
+            <a href={child.href} target="_blank" rel="noopener noreferrer" class="text-primary underline">
+              {child.text}
+            </a>
+          ) : (
+            <span>{child.text}</span>
+          )
+        )}
+      </p>
+    ) : block.type === "heading" ? (
+      <h2>{block.children.map((child: any, i: number) => child.text).join("")}</h2>
+    ) : block.type === "list" ? (
+      <ul class="list-disc list-inside">
+        {block.children.map((child: any, i: number) => (
+          <li>{child.text}</li>
+        ))}
+      </ul>
+    ) : null
+  )
+}

@@ -1,105 +1,38 @@
 ---
 import type { Section } from "@/types";
 import buildToc from "@/lib/utils/buildToc";
-import { getEntryCTM } from "@/lib/contentParser.astro";
-import parseTomlToJson from "@/lib/utils/parseTomlToJson";
 import { useTranslations } from "@/lib/utils/languageParser";
-import { slugifyyy } from "@/lib/utils/textConverter";
 import Sidebar from "./widgets/Sidebar.astro";
 import ContentList from "./widgets/ContentList.astro";
 import SinglePageLayout from "./SinglePageLayout.astro";
 
-const config = parseTomlToJson("./src/config/config.toml");
-const { table_of_contents } = config.settings.markup;
-
-const strapiUrl = import.meta.env.PROD 
-  ? 'https://your-production-domain.com' 
-  : 'http://localhost:1337';
-
-type sidebarType = {
+type SidebarType = {
   enable: boolean;
   sticky: boolean;
   widgets?: string[];
   position?: "left" | "right";
-  props?: any; // Add the 'props' property to respective sidebar widgets
+  props?: any;
 };
 
-type contentType = Section & {
-  // Core content fields
+type ContentType = Section & {
   title?: string;
   slug?: string;
-  content?: string;
+  contentBlocks?: object[];
   publishedAt?: string;
-  
-  // Strapi media field structure
-  coverImage?: {
-    id?: number;
-    name?: string;
-    alternativeText?: string | null;
-    caption?: string | null;
-    width?: number;
-    height?: number;
-    formats?: {
-      thumbnail?: ImageFormat;
-      small?: ImageFormat;
-      medium?: ImageFormat;
-      large?: ImageFormat;
-      [key: string]: ImageFormat | undefined;
-    };
-    hash?: string;
-    ext?: string;
-    mime?: string;
-    size?: number;
-    url?: string;
-    previewUrl?: string | null;
-    provider?: string;
-    provider_metadata?: any;
-    createdAt?: string;
-    updatedAt?: string;
-  };
-
-  // Categories relation
-  categories?: Array<{
-    id?: number;
-    name?: string;
-    slug?: string;
-  }>;
-
-  // Existing properties
-  markdownContent?: Function;
-  currentLocale?: string;
-  masonry_image?: string;
-  ListIcons?: {
-    icon: string;
-    label: string;
-    value: string;
-  }[];
+  coverImage?: { url?: string };
+  categories?: Array<{ name: string; slug?: string }>;
+  author?: { name: string };
 };
-
-type ImageFormat = {
-  name?: string;
-  hash?: string;
-  ext?: string;
-  mime?: string;
-  path?: string | null;
-  width?: number;
-  height?: number;
-  size?: number;
-  sizeInBytes?: number;
-  url?: string;
-};
-
 
 type Props = {
-  pageType?: "single" | "list"; // Default is "single"
-  sidebar?: sidebarType;
+  pageType?: "single" | "list";
+  sidebar?: SidebarType;
   boxShadow?: boolean;
   layout?: "modern" | "minimal";
-  content: contentType;
+  content: ContentType;
   contentList?: any;
 };
 
-// Destructure Astro props with default values
 const {
   pageType = "single",
   sidebar,
@@ -109,112 +42,44 @@ const {
   contentList,
 } = Astro.props;
 
-const { author, ListIcons: listIconContent, markdownContent } = content;
 const translations = await useTranslations(Astro.currentLocale as string);
-
-let Content: any, headings, tocHeadings;
-if (markdownContent && typeof markdownContent === "function")
-  ({ Content, headings } = await markdownContent());
-
-// Get Author Details from Strapi
-let authorEntry: Record<string, any> = {};
-if (author) {
-  try {
-    const slug = slugifyyy(author);
-    const response = await fetch(
-      `${strapiUrl}/api/authors?filters[slug][$eq]=${slug}&populate=*`
-    );
-    const authorData = await response.json();
-    authorEntry = authorData.data[0]?.attributes || {};
-  } catch (error) {
-    console.error('Error fetching author:', error);
-    authorEntry = {};
-  }
-}
-
-// Generate table of contents
-if (headings) {
-  tocHeadings = buildToc(headings);
-}
-
 const sidebarEnabled = sidebar?.enable;
 ---
 
 <section>
-  <div
-    class:list={[
-      "container",
-      {
-        "grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:items-start":
-          sidebarEnabled,
-      },
-    ]}>
-    {/* Blog Post List */}
-    {
-      pageType === "list" && (
-        <div
-          {...(sidebarEnabled && {
-            "data-aos": "fade-up-sm",
-            "data-aos-delay": "200",
-          })}
-          class:list={[
-            boxShadow && "lg:box-shadow-primary",
-            sidebarEnabled
-              ? "has-video-modal space-y-10 lg:col-span-8 lg:bg-white lg:p-5"
-              : "grid grid-cols-1 justify-items-center space-y-12",
-            sidebarEnabled && sidebar?.position === "right"
-              ? "order-1"
-              : "order-1 lg:order-2",
-          ]}>
+  <div class:list={[
+    "container",
+    sidebarEnabled && "grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:items-start"
+  ]}>
+    {pageType === "list" && (
+      <div class:list={[
+        boxShadow && "lg:box-shadow-primary",
+        sidebarEnabled ? "has-video-modal space-y-10 lg:col-span-8 lg:bg-white lg:p-5" : "grid grid-cols-1 justify-items-center space-y-12",
+        sidebarEnabled && sidebar?.position === "right" ? "order-1" : "order-1 lg:order-2",
+      ]}>
+        <ContentList {...contentList} />
+      </div>
+    )}
 
-          <ContentList {...contentList} />
-        </div>
-      )
-    }
+    {sidebarEnabled && (
+      <Sidebar sidebar={sidebar} boxShadow={boxShadow} />
+    )}
 
-    {
-      sidebarEnabled && (
-        <Sidebar
-          sidebar={sidebar}
-          boxShadow={boxShadow}
-          data-aos="fade-up-sm"
-          data-aos-delay="300"
-        />
-      )
-    }
-
-    {
-      pageType === "single" && (
-        <SinglePageLayout
-          layout={layout}
-          translations={translations}
-          sidebar={sidebar}
-          style={{ boxShadow }}
-          content={{
-            title: content.title,
-            content: content.content,
-            date: content.publishedAt ? new Date(content.publishedAt).toLocaleDateString(Astro.currentLocale) : "Unknown Date",
-            image: content.coverImage?.url ? `${strapiUrl}${content.coverImage.url}`: '/default-image.jpg',
-            categories: content.categories,
-            table_of_contents,
-            tocHeadings,
-            listIconContent,
-            author: authorEntry
-          }}
-        />
-      )
-    }
+    {pageType === "single" && (
+      <SinglePageLayout
+        layout={layout}
+        translations={translations}
+        sidebar={sidebar}
+        style={{ boxShadow }}
+        content={{
+          title: content.title,
+          contentBlocks: content.contentBlocks,
+          date: content.publishedAt,
+          image: content.coverImage?.url ? (import.meta.env.PUBLIC_STRAPI_API_URL || "http://localhost:1337") + content.coverImage.url : '/images/default-blog.jpg',
+          categories: content.categories,
+          author: content.author,
+        }}
+      />
+    )}
   </div>
 </section>
-
-<script>
-  import { stickySidebar } from "@/plugins/sticky-sidebar.js";
-
-  const sidebar = document.querySelector(".sticky-sidebar");
-  if (sidebar) {
-    new stickySidebar(sidebar, {
-      offsetTop: 132,
-      offsetBottom: 20,
-    });
-  }
-</script>

@@ -54,10 +54,10 @@ if (content === "portfolio") {
   try {
     const pageSize = config.settings.pagination || 6;
     const page = pagination?.currentPage || 1;
+    const url = `${strapiUrl}/api/posts?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc&populate=*`;
     
-    const response = await fetch(
-      `${strapiUrl}/api/posts?pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate=*&sort[0]=publishedAt:desc`
-    );
+
+    const response = await fetch(url);
     
     const { data, meta } = await response.json();
     
@@ -72,16 +72,17 @@ if (content === "portfolio") {
       content?: string;
       slug: string;
       id: number;
+      author?: { name: string };
     };
-    
+
     posts = data.map((post: Post) => ({
       data: {
         title: post.title,
         date: new Date(post.publishedAt).toLocaleDateString(Astro.currentLocale),
         image: post.coverImage?.url  ? `${strapiUrl}${post.coverImage.url}`: '/images/default-blog.jpg',
         categories: post.categories?.map(cat => cat.name) || [],
-        excerpt: post.content?.substring(0, 150) + '...' || '',
-        content: post.content
+        content: post.content,
+        author: post.author?.name || '',
       },
       slug: post.slug,
       id: post.id
