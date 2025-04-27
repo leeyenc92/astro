@@ -331,3 +331,28 @@ type StatItem = {
 
 // END ACHIEVEMENTS SECTION
 // ----------------------------------------------------------------------
+
+export type Post = {
+  title: string;
+  publishedAt: string;
+  coverImage?: { url?: string };
+  categories?: { name: string }[];
+  content?: array;
+  slug: string;
+  id: number;
+  author?: { name: string; avatar?: { url?: string }, role: string };
+};
+
+export interface StrapiPaginationMeta {
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
+  };
+}
+
+export interface StrapiResponse<T> {
+  data: T;
+  meta?: StrapiPaginationMeta;
+}

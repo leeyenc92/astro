@@ -14,14 +14,9 @@ type SidebarType = {
 };
 
 type ContentType = Section & {
-  title?: string;
-  slug?: string;
-  contentBlocks?: object[];
-  publishedAt?: string;
-  coverImage?: { url?: string };
-  categories?: Array<{ name: string; slug?: string }>;
-  author?: string;
+  categories?: string[];
   authorObject?: { title: string; image?: string | null; role?: string; } | null;
+  content?: Array<any>| null
 };
 
 type Props = {
@@ -71,13 +66,10 @@ const sidebarEnabled = sidebar?.enable;
         translations={translations}
         sidebar={sidebar}
         style={{ boxShadow }}
-        content={{
-          title: content.title,
-          contentBlocks: content.contentBlocks,
-          date: content.publishedAt,
-          image: content.coverImage?.url ? (import.meta.env.PUBLIC_STRAPI_API_URL || "http://localhost:1337") + content.coverImage.url : '/images/default-blog.jpg',
-          categories: content.categories,
-          author: content.authorObject,
+        content={{ 
+          ...content, 
+          author: content.authorObject, 
+          Content: content.content
         }}
       />
     )}

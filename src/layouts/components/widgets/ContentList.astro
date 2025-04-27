@@ -1,18 +1,17 @@
 ---
+import fetchApi from "@/lib/utils/fetchApi";
 import { getCollectionCTM } from "@/lib/contentParser.astro";
-import type { ContentListType } from "@/types";
+import type { ContentListType, Post, StrapiResponse } from "@/types";
 import parseTomlToJson from "@/lib/utils/parseTomlToJson";
 import BlogCard from "@/components/cards/BlogCard.astro";
 import PortfolioCard from "@/components/cards/PortfolioCard.astro";
 import { recursiveCloneObject } from "@/lib/utils/objectFunctions";
 import Pagination from "@/components/widgets/Pagination.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
+import resolveImageUrl from "@/lib/utils/resolveImageUrl";
 
 const config = parseTomlToJson("./src/config/config.toml");
-const strapiUrl = import.meta.env.PROD 
-  ? 'https://your-production-domain.com' 
-  : 'http://localhost:1337';
-  
+
 type Props = {
   class?: string;
   hasSearch?: boolean;
@@ -30,15 +29,9 @@ type Props = {
   [key: string]: any;
 };
 
-const { class: className, pagination, filter, options, items = [],  ...rest } = Astro.props;
+const { class: className, pagination, filter, options, items = [], ...rest } = Astro.props;
 
-const {
-  content,
-  layout,
-  limit = false,
-  gap = "gap-6",
-  columns = 3,
-} = options || {};
+const { content, layout, limit = false, gap = "gap-6", columns = 3 } = options || {};
 
 // Get content list based on content value
 let list = [] as any[];
@@ -46,68 +39,49 @@ let posts = [] as any[];
 let totalPages = 1;
 
 if (content === "portfolio") {
-  list = await getCollectionCTM(
-    config.settings.portfolio_folder,
-    Astro.currentLocale,
-  );
-}else if (content === "blog") {
+  list = await getCollectionCTM(config.settings.portfolio_folder, Astro.currentLocale);
+} else if (content === "blog") {
   try {
     const pageSize = config.settings.pagination || 6;
     const page = pagination?.currentPage || 1;
-    const url = `${strapiUrl}/api/posts?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc&populate=*`;
-    
 
-    const response = await fetch(url);
-    
-    const { data, meta } = await response.json();
-    
-    type Post = {
-      title: string;
-      publishedAt: string;
-      coverImage?: {
-        url?: string;
-        alternativeText?: string;
-      };
-      categories?: { name: string }[];
-      content?: string;
-      slug: string;
-      id: number;
-      author?: { name: string };
-    };
+    const { data, meta } = await fetchApi<StrapiResponse<Post[]>>({
+      endpoint: "posts",
+      query: {
+        "pagination[page]": String(page),
+        "pagination[pageSize]": String(pageSize),
+        sort: "publishedAt:desc",
+        populate: "*",
+      },
+    });
 
-    posts = data.map((post: Post) => ({
+    posts = data.map((post) => ({
       data: {
         title: post.title,
         date: new Date(post.publishedAt).toLocaleDateString(Astro.currentLocale),
-        image: post.coverImage?.url  ? `${strapiUrl}${post.coverImage.url}`: '/images/default-blog.jpg',
-        categories: post.categories?.map(cat => cat.name) || [],
+        image: resolveImageUrl(post.coverImage),
+        categories: post.categories?.map((cat) => cat.name) || [],
         content: post.content,
-        author: post.author?.name || '',
+        author: post.author?.name || "",
       },
       slug: post.slug,
-      id: post.id
+      id: post.id,
     }));
-    
+
     list = posts;
-    totalPages = meta.pagination.pageCount;
-    
+    totalPages = meta?.pagination?.pageCount ?? 1;
   } catch (error) {
-    console.error('Blog fetch error:', error);
+    console.error("Blog fetch error:", error);
     list = [];
   }
 }
 
 // Limit content list
-list =
-  limit && list && pagination?.enable === false
-    ? list.slice(0, limit as number)
-    : list;
+list = limit && list && pagination?.enable === false ? list.slice(0, limit as number) : list;
 
 // Filter content list based on category (If provided)
 if (filter?.category) {
-  list = list.filter((item) =>
-    item.data.categories.includes(filter.category?.name),
-  );
+  list = list.filter((item) => item.data.categories.includes(filter.category?.name));
 }
 
 // Sort list by date
@@ -134,8 +108,7 @@ if (content === "blog" && pagination?.enable) {
           {
             "grid grid-cols-1": layout === "grid" && columns === 1,
             "grid md:grid-cols-2": layout === "grid" && columns === 2,
-            "grid md:grid-cols-2 lg:grid-cols-3":
-              layout === "grid" && columns === 3,
+            "grid md:grid-cols-2 lg:grid-cols-3": layout === "grid" && columns === 3,
           },
           {
             "break-inside-avoid-column": layout === "masonry",
@@ -144,7 +117,8 @@ if (content === "blog" && pagination?.enable) {
             "md:columns-2 lg:columns-3": layout === "masonry" && columns === 3,
           },
         ]}
-        {...rest}>
+        {...rest}
+      >
         {list.map((item) =>
           content === "blog" ? (
             <BlogCard
@@ -169,17 +143,10 @@ if (content === "blog" && pagination?.enable) {
               content={{ ...item.data, slug: item.slug, ...item }}
               options={recursiveCloneObject(options)}
             />
-          ) : null,
+          ) : null
         )}
       </div>
-      {content === "blog" && pagination?.enable && (
-      <Pagination
-        class="pt-8"
-        collection="blog"
-        currentPage={pagination?.currentPage || 1}
-        totalPages={totalPages}
-      />
-    )}
+      {content === "blog" && pagination?.enable && <Pagination class="pt-8" collection="blog" currentPage={pagination?.currentPage || 1} totalPages={totalPages} />}
     </>
   )
 }
