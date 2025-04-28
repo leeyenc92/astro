@@ -15,8 +15,8 @@ type SidebarType = {
 
 type ContentType = Section & {
   categories?: string[];
-  authorObject?: { title: string; image?: string | null; role?: string; } | null;
-  content?: Array<any>| null
+  authorObject?: { title: string; image?: string | null; role?: string } | null;
+  content?: Array<any> | null;
 };
 
 type Props = {
@@ -24,54 +24,44 @@ type Props = {
   sidebar?: SidebarType;
   boxShadow?: boolean;
   layout?: "modern" | "minimal";
-  content: ContentType;
+  content?: ContentType;
   contentList?: any;
 };
 
-const {
-  pageType = "single",
-  sidebar,
-  boxShadow = true,
-  layout = "modern",
-  content,
-  contentList,
-} = Astro.props;
+const { pageType = "single", sidebar, boxShadow = false, layout = "modern", content, contentList } = Astro.props;
 
 const translations = await useTranslations(Astro.currentLocale as string);
 const sidebarEnabled = sidebar?.enable;
 ---
 
 <section>
-  <div class:list={[
-    "container",
-    sidebarEnabled && "grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:items-start"
-  ]}>
-    {pageType === "list" && (
-      <div class:list={[
-        boxShadow && "lg:box-shadow-primary",
-        sidebarEnabled ? "has-video-modal space-y-10 lg:col-span-8 lg:bg-white lg:p-5" : "grid grid-cols-1 justify-items-center space-y-12",
-        sidebarEnabled && sidebar?.position === "right" ? "order-1" : "order-1 lg:order-2",
-      ]}>
-        <ContentList {...contentList} />
-      </div>
-    )}
+  <div class:list={["container", sidebarEnabled && "grid grid-cols-1 gap-x-6 gap-y-16 lg:grid-cols-12 lg:items-start"]}>
+    {
+      pageType === "list" && contentList && (
+        <div
+          class:list={[
+            boxShadow && "lg:box-shadow-primary",
+            sidebarEnabled ? "has-video-modal space-y-10 lg:col-span-8 lg:bg-white lg:p-5" : "grid grid-cols-1 justify-items-center space-y-12",
+            sidebarEnabled && sidebar?.position === "right" ? "order-1" : "order-1 lg:order-2",
+          ]}
+        >
+          <ContentList {...contentList} />
+        </div>
+      )
+    }
 
-    {sidebarEnabled && (
-      <Sidebar sidebar={sidebar} boxShadow={boxShadow} />
-    )}
+    {sidebarEnabled && <Sidebar sidebar={sidebar} boxShadow={boxShadow} />}
 
-    {pageType === "single" && (
-      <SinglePageLayout
-        layout={layout}
-        translations={translations}
-        sidebar={sidebar}
-        style={{ boxShadow }}
-        content={{ 
-          ...content, 
-          author: content.authorObject, 
-          Content: content.content
-        }}
-      />
-    )}
+    {
+      pageType === "single" && content && (
+        <SinglePageLayout
+          layout={layout}
+          translations={translations}
+          sidebar={sidebar}
+          style={{ boxShadow }}
+          content={{ ...content, author: content.authorObject, Content: content.content  }}
+        />
+      )
+    }
   </div>
 </section>

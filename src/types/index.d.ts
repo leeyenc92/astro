@@ -343,7 +343,20 @@ export type Post = {
   author?: { name: string; avatar?: { url?: string }, role: string };
 };
 
-export interface StrapiPaginationMeta {
+export type PostListItem = {
+  data: {
+    title: string;
+    date: string;
+    image: string | null;
+    categories: string[];
+    content: string;
+    author: string;
+  };
+  slug: string;
+  id: number;
+};
+
+export type StrapiPaginationMeta = {
   pagination: {
     page: number;
     pageSize: number;
@@ -352,7 +365,7 @@ export interface StrapiPaginationMeta {
   };
 }
 
-export interface StrapiResponse<T> {
+export type StrapiResponse<T> ={
   data: T;
   meta?: StrapiPaginationMeta;
 }

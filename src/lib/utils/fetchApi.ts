@@ -1,17 +1,10 @@
+import buildQuery from "@/lib/utils/buildQuery";
+
 interface Props {
   endpoint: string;
   query?: Record<string, string | true>;
   wrappedByKey?: string;
   wrappedByList?: boolean;
-}
-
-function buildQuery(query: Record<string, string | true>): string {
-  return Object.entries(query)
-    .map(([key, value]) => {
-      if (value === true) return encodeURIComponent(key); // Only key
-      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`; // key=value
-    })
-    .join("&");
 }
 
 export default async function fetchApi<T>({

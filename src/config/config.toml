@@ -54,7 +54,7 @@
   services_folder  = "services" # Folder where services are stored
   portfolio_folder = "case-studies" # Folder where case-studies or projects or portfolio are stored
 
-  pagination    = 5 # Number of posts displayed on each page blog list page
+  pagination    = 6 # Number of posts displayed on each page blog list page
   sticky_header = true # Enables or disable sticky feature of header
   brand_name    = "Looka" # Name to be displayed in the footer as big text
 
