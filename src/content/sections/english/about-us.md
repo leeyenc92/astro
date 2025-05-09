@@ -1,6 +1,6 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: "Expertise, Integrity, and Transformable Solutions"
+title: "你好吗"
 cta_btn:
   enable: true
   label: "Learn More About Us"
@@ -14,7 +14,7 @@ achievements:
     - value: "500"
       prepend_value: ""
       append_value: "+"
-      description: "We have a proven track record of delivering outstanding results for over 500 projects across various industries"
+      description: "We have a 你好吗"
     - value: "20"
       prepend_value: ""
       append_value: "+"

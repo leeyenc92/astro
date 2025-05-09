@@ -356,6 +356,13 @@ export type PostListItem = {
   id: number;
 };
 
+export type Category = {
+  data: {
+    name: string;  
+  };
+  slug: string;
+};
+
 export type StrapiPaginationMeta = {
   pagination: {
     page: number;
