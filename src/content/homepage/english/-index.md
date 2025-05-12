@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Home"
 meta_description: "This is a example description"
 
 # Override Default Content of `/sections/services-section.md`
