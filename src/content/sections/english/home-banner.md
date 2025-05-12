@@ -14,7 +14,7 @@ about:
     id: "banner-video"
 slider:
   - enable: true
-    title: "Innovative Solutions for Sustainable Success"
+    title: "什么鬼？for Sustainable Success"
     description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
     background_image: "/images/banner/1.jpg"
     button:
@@ -34,7 +34,17 @@ slider:
       rel: ""
       target: ""
   - enable: true
-    title: "Transforming Challenges into Opportunities"
+    title: "T into Opportunities"
+    description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
+    background_image: "/images/banner/3.jpg"
+    button:
+      enable: true
+      label: "Request a Consultation"
+      url: "/contact"
+      rel: ""
+      target: ""
+  - enable: true
+    title: "多出来的 into Opportunities"
     description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
     background_image: "/images/banner/3.jpg"
     button:

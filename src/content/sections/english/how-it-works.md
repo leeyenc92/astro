@@ -40,4 +40,15 @@ list:
       background: "/images/how-it-works/bg.svg"
       alt: "Image explaing Market & Competitive Analysis"
     number: "03"
+  - title: "一加一"
+    description: |
+      Based on the collaborative session, we translate strategies into a clear and actionable roadmap.
+
+      This plan outlines specific steps, timelines, and performance metrics to track progress.
+    images:
+      src:
+        - "/images/how-it-works/Iamastro.png"
+      background: "/images/how-it-works/bg.svg"
+      alt: "Image explaing Market & Competitive Analysis"
+    number: "04"
 ---
