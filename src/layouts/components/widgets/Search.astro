@@ -1,16 +1,14 @@
 ---
 import parseTomlToJson from "@/lib/utils/parseTomlToJson";
-import { getCollectionCTM } from "@/lib/contentParser.astro";
+import type { Post, StrapiResponse } from "@/types";
 import OptimizedImage from "../utilities/OptimizedImage.astro";
 import { getEntryCTM } from "@/lib/contentParser.astro";
-import { sortByDate } from "@/lib/utils/sortFunctions";
 import bgOptimizedImage from "@/lib/utils/bgOptimizedImage";
 import { slugifyyy } from "@/lib/utils/textConverter";
-import { generateCategorySlugs } from "@/lib/taxonomyParser.astro";
-import {
-  getLocaleUrlCTM,
-  useTranslations,
-} from "@/lib/utils/languageParser.ts";
+import resolveImageUrl from "@/lib/utils/resolveImageUrl";
+import fetchApi from "@/lib/utils/fetchApi";
+
+import { useTranslations } from "@/lib/utils/languageParser.ts";
 
 interface Props {
   class?: string;
@@ -20,60 +18,33 @@ interface Props {
 const currentLocale = Astro.currentLocale;
 const config = parseTomlToJson("./src/config/config.toml");
 const blogFolder = config.settings.blog_folder as "blog";
-const postIndex = await getEntryCTM(
-  blogFolder as "blog",
-  "-index",
-  currentLocale,
-);
+const postIndex = await getEntryCTM(blogFolder as "blog", "-index", currentLocale);
 
-const blogCardLayout =
-  Astro.props.blogCardLayout ||
-  postIndex?.data.settings?.card?.layout ||
-  "classic";
+const blogCardLayout = Astro.props.blogCardLayout || postIndex?.data.settings?.card?.layout || "classic";
 
-let posts = await getCollectionCTM(blogFolder as "blog", currentLocale);
-posts = await processPosts(posts);
-
-const postJson = sortByDate(posts).map((item) => {
-  return {
-    title: item.data.title,
-    slug: getLocaleUrlCTM(item.slug, currentLocale, blogFolder),
-    date: item.data.date,
-    author: item.data.author,
-    authorImage: item.data.author_image,
-    image: item.data.image,
-    description: item.data.description,
-    categories: generateCategorySlugs(
-      item.data.categories,
-      currentLocale as string,
-      blogFolder,
-    ),
-  };
+let { data } = await fetchApi<StrapiResponse<Post[]>>({
+  endpoint: "posts",
+  query: {
+    "populate[coverImage][populate]": true,
+    populate: "categories",
+    sort: "publishedAt:desc",
+  },
 });
 
-async function processPosts(sortedPosts: any) {
-  sortedPosts = await Promise.all(
-    sortedPosts.map(async (post: any) => {
-      const authorEntry = await getEntryCTM(
-        "author",
-        slugifyyy(post.data.author || ""),
-        currentLocale,
-      );
-
-      return {
-        ...post,
-        data: {
-          ...post.data,
-          image: await bgOptimizedImage(post.data.image),
-          author: authorEntry?.data.title,
-          author_image: await bgOptimizedImage(authorEntry?.data.image),
-        },
-      };
-    }),
-  );
-
-  return sortedPosts;
-}
+const postJson = data.map((post) => {
+  return {
+    title: post.title,
+    date: new Date(post.publishedAt).toLocaleDateString(Astro.currentLocale),
+    image: resolveImageUrl(post.coverImage),
+    categories:
+      post.categories?.map((cat) => ({
+        name: cat.name,
+        slug: slugifyyy(cat.name),
+      })) || [],
+    content: post.content,
+    author: post.author?.name || "",
+  };
+});
 
 const baseURL = Astro.url.origin;
 const t = await useTranslations(Astro.currentLocale as string);
@@ -94,27 +65,14 @@ const notFoundImage = await bgOptimizedImage("/images/404.svg");
         placeholder={t("widgets.post_search_form_placeholder")}
         class="border-border-default focus:ring-border-default/25 focus:border-border-default placeholder:text-text-default/70 h-full w-full border py-4 pl-5 shadow-none outline-0 placeholder:text-sm focus:ring-4"
       />
-      <button
-        type="submit"
-        class="has-icon-moving-animation absolute top-1 right-1 flex h-[calc(100%_-_0.5rem)] w-12 items-center justify-center bg-slate-100">
+      <button type="submit" class="has-icon-moving-animation absolute top-1 right-1 flex h-[calc(100%_-_0.5rem)] w-12 items-center justify-center bg-slate-100">
         <span class="sr-only">Subscribe</span>
-        <span
-          class="icons-wrapper inline-flex h-10 w-10 items-center justify-center">
+        <span class="icons-wrapper inline-flex h-10 w-10 items-center justify-center">
           <span class="icon icon-before flex items-center justify-center">
-            <OptimizedImage
-              alt="icon"
-              inlineSvg={true}
-              class="h-4 w-4 text-slate-700"
-              src="/images/icons/svg/arrow-top-right.svg"
-            />
+            <OptimizedImage alt="icon" inlineSvg={true} class="h-4 w-4 text-slate-700" src="/images/icons/svg/arrow-top-right.svg" />
           </span>
           <span class="icon icon-after flex items-center justify-center">
-            <OptimizedImage
-              alt="icon"
-              inlineSvg={true}
-              class="h-4 w-4 text-slate-700"
-              src="/images/icons/svg/arrow-top-right.svg"
-            />
+            <OptimizedImage alt="icon" inlineSvg={true} class="h-4 w-4 text-slate-700" src="/images/icons/svg/arrow-top-right.svg" />
           </span>
         </span>
       </button>
@@ -145,13 +103,7 @@ const notFoundImage = await bgOptimizedImage("/images/404.svg");
     const hasTrailingSlash = urlPath.endsWith("/");
 
     // Adjust the URL path based on the trailing slash rule
-    const adjustedPath = shouldHaveTrailingSlash
-      ? hasTrailingSlash
-        ? urlPath
-        : `${urlPath}/`
-      : hasTrailingSlash
-        ? urlPath.slice(0, -1)
-        : urlPath;
+    const adjustedPath = shouldHaveTrailingSlash ? (hasTrailingSlash ? urlPath : `${urlPath}/`) : hasTrailingSlash ? urlPath.slice(0, -1) : urlPath;
 
     // Reattach the fragment if it exists
     const fullURL = fragment ? `${adjustedPath}#${fragment}` : adjustedPath;
@@ -248,7 +200,7 @@ const notFoundImage = await bgOptimizedImage("/images/404.svg");
               (category, index) => `
                 <a href="${trailingSlashCheckerInline(`/${blogFolder}/category/${category.slug}`)}" class="text-inherit">${category.name}</a>
                 ${index !== post.categories.length - 1 ? `<span class="inline-block w-[0.1875rem] h-[0.1875rem] bg-primary rounded-full"></span>` : ""}
-              `,
+              `
             )
             .join("")}
         </div>
@@ -292,7 +244,7 @@ const notFoundImage = await bgOptimizedImage("/images/404.svg");
                 (category, index) => `
                 <a href="${category.slug}" class="text-inherit">${category.name}</a>
                 ${index !== post.categories.length - 1 ? `<span class="inline-block w-[0.1875rem] h-[0.1875rem] bg-primary rounded-full"></span>` : ""}
-              `,
+              `
               )
               .join("")}
           </div>
@@ -385,7 +337,6 @@ const notFoundImage = await bgOptimizedImage("/images/404.svg");
 
     // Append to the blog container
     const container = searchResults;
-    container.innerHTML +=
-      layout === "modern" ? blogModernHTML : blogClassicHTML;
+    container.innerHTML += layout === "modern" ? blogModernHTML : blogClassicHTML;
   }
 </script>
