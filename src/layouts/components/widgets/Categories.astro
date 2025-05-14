@@ -1,32 +1,19 @@
 ---
 import ReactIcon from "@/helpers/ReactIcons.astro";
-import parseTomlToJson from "@/lib/utils/parseTomlToJson";
-import { getCollectionCTM } from "@/lib/contentParser.astro";
-import { getTaxonomy } from "@/lib/taxonomyParser.astro";
 import { useTranslations } from "@/lib/utils/languageParser.ts";
 import fetchApi from "@/lib/utils/fetchApi";
+import type { StrapiResponse, Category } from "@/types";
 
 interface Props {
   class?: string;
 }
 
-type StrapiCategory = {
-  id: number;
-  name: string;
-  slug: string;
-  posts: {
-    id: number;
-    title: string;
-    slug: string;
-  }[];
-};
-
-const strapiCategories = await fetchApi<{ data: StrapiCategory[] }>({
+const { data } = await fetchApi<StrapiResponse<Category[]>>({
   endpoint: "categories",
   query: { "populate": "posts" },
 });
 
-let categories = strapiCategories.data.map((category) => ({
+let categories = data.map((category) => ({
   name: category.name,
   slug: `/blog/category/${category.slug}/`,
   count: category.posts?.length || 0,

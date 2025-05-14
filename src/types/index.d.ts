@@ -343,6 +343,23 @@ export type Post = {
   author?: { name: string; avatar?: { url?: string }, role: string };
 };
 
+export type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  posts: {
+    id: number;
+    title: string;
+    slug: string;
+  }[];
+};
+
+export type CategoryListItem = {
+  id: number;
+  name: string;  
+  slug: string;
+};
+
 export type PostListItem = {
   data: {
     title: string;
@@ -356,11 +373,6 @@ export type PostListItem = {
   id: number;
 };
 
-export type Category = {
-  id: number;
-  name: string;  
-  slug: string;
-};
 
 export type StrapiPaginationMeta = {
   pagination: {
