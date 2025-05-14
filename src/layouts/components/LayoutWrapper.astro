@@ -4,6 +4,7 @@ import { useTranslations } from "@/lib/utils/languageParser";
 import Sidebar from "./widgets/Sidebar.astro";
 import ContentList from "./widgets/ContentList.astro";
 import SinglePageLayout from "./SinglePageLayout.astro";
+import { markdownify } from "@/lib/utils/textConverter";
 
 type SidebarType = {
   enable: boolean;
@@ -16,7 +17,7 @@ type SidebarType = {
 type ContentType = Section & {
   categories?: string[];
   authorObject?: { title: string; image?: string | null; role?: string } | null;
-  content?: Array<any> | null;
+  content?:string | null;
 };
 
 type Props = {
@@ -29,7 +30,6 @@ type Props = {
 };
 
 const { pageType = "single", sidebar, boxShadow = false, layout = "modern", content, contentList } = Astro.props;
-
 const translations = await useTranslations(Astro.currentLocale as string);
 const sidebarEnabled = sidebar?.enable;
 ---
@@ -59,7 +59,11 @@ const sidebarEnabled = sidebar?.enable;
           translations={translations}
           sidebar={sidebar}
           style={{ boxShadow }}
-          content={{ ...content, author: content.authorObject, Content: content.content  }}
+          content={{ 
+            ...content, 
+            author: content.authorObject , 
+            Content: markdownify(content.content ?? "", true) 
+          }}
         />
       )
     }

@@ -43,7 +43,7 @@ const post = {
     role: postData.author?.role || '',
   },
   categories: postData.categories?.map((cat: { name: string }) => cat.name) || [],
-  excerpt: postData.content?.[0]?.children?.[0]?.text?.slice(0, 150) + '...' || '',
+  excerpt: postData.excerpt,
   image: resolveImageUrl(postData.coverImage),
   content: postData.content || null,
 };

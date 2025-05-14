@@ -337,10 +337,28 @@ export type Post = {
   publishedAt: string;
   coverImage?: { url?: string };
   categories?: { name: string }[];
+  excerpt?: string;
   content?: array;
   slug: string;
   id: number;
   author?: { name: string; avatar?: { url?: string }, role: string };
+};
+
+export type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  posts: {
+    id: number;
+    title: string;
+    slug: string;
+  }[];
+};
+
+export type CategoryListItem = {
+  id: number;
+  name: string;  
+  slug: string;
 };
 
 export type PostListItem = {
@@ -356,12 +374,6 @@ export type PostListItem = {
   id: number;
 };
 
-export type Category = {
-  data: {
-    name: string;  
-  };
-  slug: string;
-};
 
 export type StrapiPaginationMeta = {
   pagination: {
