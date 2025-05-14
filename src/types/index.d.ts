@@ -357,9 +357,8 @@ export type PostListItem = {
 };
 
 export type Category = {
-  data: {
-    name: string;  
-  };
+  id: number;
+  name: string;  
   slug: string;
 };
 

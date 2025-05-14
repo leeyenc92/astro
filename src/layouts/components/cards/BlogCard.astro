@@ -58,12 +58,9 @@ const categoriesArray = categories?.map((category: string) => ({
   slug: slugifyyy(category),
 }));
 
-let slug = getLocaleUrlCTM(
-  content.slug,
-  Astro.currentLocale,
-  content.collection,
-);
----
+let slug = `/blog/${content.slug}/`;
+
+--- 
 
 {
   options?.card.layout === "horizontal" ? (
