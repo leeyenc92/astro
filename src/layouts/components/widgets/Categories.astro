@@ -3,50 +3,34 @@ import ReactIcon from "@/helpers/ReactIcons.astro";
 import parseTomlToJson from "@/lib/utils/parseTomlToJson";
 import { getCollectionCTM } from "@/lib/contentParser.astro";
 import { getTaxonomy } from "@/lib/taxonomyParser.astro";
-import {
-  getLocaleUrlCTM,
-  useTranslations,
-} from "@/lib/utils/languageParser.ts";
-
-interface Category {
-  name: string;
-  slug: string;
-  count: number;
-}
+import { useTranslations } from "@/lib/utils/languageParser.ts";
+import fetchApi from "@/lib/utils/fetchApi";
 
 interface Props {
   class?: string;
 }
 
-const config = parseTomlToJson("./src/config/config.toml");
-const posts = await getCollectionCTM(
-  config.settings.blog_folder as "blog",
-  Astro.currentLocale,
-);
+type StrapiCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  posts: {
+    id: number;
+    title: string;
+    slug: string;
+  }[];
+};
 
-let categories = (await getTaxonomy(
-  config.settings.blog_folder as "blog",
-  "categories",
-  Astro.currentLocale as string,
-)) as Category[];
-
-categories = categories.map((category) => {
-  const count = posts.filter((post) =>
-    post.data.categories.includes(category.name),
-  ).length;
-
-  const slug = getLocaleUrlCTM(
-    category.slug,
-    Astro.currentLocale,
-    `/${config.settings.blog_folder}/category`,
-  );
-
-  return {
-    ...category,
-    count,
-    slug,
-  };
+const strapiCategories = await fetchApi<{ data: StrapiCategory[] }>({
+  endpoint: "categories",
+  query: { "populate": "posts" },
 });
+
+let categories = strapiCategories.data.map((category) => ({
+  name: category.name,
+  slug: `/blog/category/${category.slug}/`,
+  count: category.posts?.length || 0,
+}));
 
 const t = await useTranslations(Astro.currentLocale as string);
 
