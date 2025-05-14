@@ -42,6 +42,7 @@ const postJson = data.map((post) => {
         slug: slugifyyy(cat.name),
       })) || [],
     content: post.content,
+    slug: `/blog/${post.slug}/`,
     author: post.author?.name || "",
   };
 });

@@ -337,6 +337,7 @@ export type Post = {
   publishedAt: string;
   coverImage?: { url?: string };
   categories?: { name: string }[];
+  excerpt?: string;
   content?: array;
   slug: string;
   id: number;
