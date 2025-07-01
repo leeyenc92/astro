@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 167 156">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        fill: none;
+      }
+
+      .st1 {
+        stroke: #b5a280;
+      }
+
+      .st2 {
+        opacity: .2;
+      }
+
+      .st3 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="167" height="156"/>
+    </clipPath>
+  </defs>
+  <g class="st3">
+    <g class="st2">
+      <line class="st1" x1="270.8" y1="72.2" x2="166.7" y2="72.2"/>
+      <line class="st1" x1="104.6" y1="210.3" x2="104.6" y2="117.9"/>
+      <line class="st1" x1="105.1" y1="118.4" x2="1" y2="118.4"/>
+      <line class="st1" x1="35.2" y1="164.1" x2="35.2" y2="71.8"/>
+      <line class="st1" x1="174.6" y1="72.3" x2="70.4" y2="72.3"/>
+      <line class="st1" x1="104.6" y1="117.9" x2="104.6" y2="25.6"/>
+      <line class="st1" x1="105.1" y1="26.1" x2="1" y2="26.1"/>
+      <line class="st1" x1="35.2" y1="71.8" x2="35.2" y2="-20.6"/>
+      <line class="st1" x1="104.6" y1="25.6" x2="104.6" y2="-66.8"/>
+    </g>
+  </g>
+</svg>
