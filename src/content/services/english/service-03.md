@@ -1,8 +1,8 @@
 ---
-title: "Strategic Planning"
-description: "Craft detailed strategic plans that align with your long-term business goals."
+title: "《预算管理 2.0》系统课程： 系统方法论，赋能管理者"
+description: 为企业主和高管团队量身打造，深入学习预算编制、目标设定、成本控制、薪酬激励、财务分析的全套实战技能，掌握利润增长的‘导航图’"
 
-image: "/images/services/3.jpg"
+image: "/images/services/7.jpg"
 icon: "/images/icons/svg/services/task.svg"
 
 # Short intro about this service

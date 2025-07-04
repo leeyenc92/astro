@@ -8,7 +8,7 @@ has_custom_line_animation_bg: true
 index_services_section:
   enable: true # Control the visibility of this section across all services single
   # title: "Additional Services to Maximize Your Business Potential"
-  # subtitle: "Our Services"
+  # subtitle: "我们的服务"
 
   creative_shape: # Background shape
     enable: true
@@ -43,7 +43,7 @@ service_details_marquee:
 services_section:
   enable: true # Control the visibility of this section across all services single
   title: "Additional Services to Maximize Your Business Potential"
-  # subtitle: "Our Services"
+  # subtitle: "我们的服务"
 
   creative_shape: # Background shape
     enable: false

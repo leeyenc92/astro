@@ -1,6 +1,6 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: "你好吗"
+title: "MMC：以终为始，预算驱动利润引擎"
 cta_btn:
   enable: true
   label: "Learn More About Us"

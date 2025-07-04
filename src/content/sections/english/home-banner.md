@@ -14,42 +14,32 @@ about:
     id: "banner-video"
 slider:
   - enable: true
-    title: "什么鬼？for Sustainable Success"
-    description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
-    background_image: "/images/banner/1.jpg"
+    title: "MMC 预算专家 ｜ 驱动企业利润持续增长"
+    description: "我们通过科学的预算管理体系与全程落地咨询，帮助中大型企业将战略转化为实效，实现收入与利润的双重增长。预算决定胜算，先算后做。"
+    background_image: "/images/banner/5.jpg"
     button:
       enable: true
-      label: "Request a Consultation"
+      label: "预约专家咨询"
       url: "/contact"
       rel: ""
       target: ""
   - enable: true
-    title: "Strategic Solutions for Dynamic Business Growth"
-    description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
-    background_image: "/images/banner/2.jpg"
+    title: "利润增长停滞？MMC预算管理，助您精准破局"
+    description: "当传统方法失效，MMC以利润为导向的预算体系，将成为您企业突破困局、实现跨越式发展的关键。"
+    background_image: "/images/banner/6.jpg"
     button:
       enable: true
-      label: "Request a Consultation"
+      label: "了解如何破局"
       url: "/contact"
       rel: ""
       target: ""
   - enable: true
-    title: "T into Opportunities"
-    description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
-    background_image: "/images/banner/3.jpg"
+    title: " 不止于理论，MMC预算体系助您战略落地"
+    description: "选择MMC，选择一套经过验证的利润增长方法论。我们提供从顶层设计到全程陪跑的深度服务，确保预算‘不只是纸上谈兵’。"
+    background_image: "/images/banner/7.jpg"
     button:
       enable: true
-      label: "Request a Consultation"
-      url: "/contact"
-      rel: ""
-      target: ""
-  - enable: true
-    title: "多出来的 into Opportunities"
-    description: "Partner with us for customized business solutions that elevate your <br/> corporate performance and ensure long-term success"
-    background_image: "/images/banner/3.jpg"
-    button:
-      enable: true
-      label: "Request a Consultation"
+      label: "为何选择MMC"
       url: "/contact"
       rel: ""
       target: ""

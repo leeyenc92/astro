@@ -1,6 +1,6 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-description: "We are honored to work alongside these distinguished partners."
+description: "他们选择了MMC预算管理课程 ｜ 与这些具有前瞻视野的企业一同，掌握驱动利润增长的预算罗盘。"
 
 marquee:
   element_width: "11.25rem"

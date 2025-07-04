@@ -1,8 +1,8 @@
 ---
-title: "Competitive Analysis"
-description: "Understand your competitors' strengths and weaknesses."
+title: "预算管理落地咨询服务:专家陪跑，确保成果转化"
+description: 资深顾问团队进驻企业，提供一对一‘陪跑’服务，量身定制预算管理体系，辅导团队掌握并有效运用，将学习成果转化为实实在在的经营绩效。"
 
-image: "/images/services/2.jpg"
+image: "/images/services/8.jpg"
 icon: "/images/icons/svg/services/leader-board.svg"
 
 # Short intro about this service

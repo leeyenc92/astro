@@ -18,7 +18,7 @@ cta_shape_two: "/images/shapes/cta-shape-two.svg"
 right_content: "image" # Choose between "image" or "stats" for the content of the right side of the section
 
 image_block:
-  image: "/images/call-to-action/image.png"
+  image: "/images/call-to-action/sparkliang.png"
   experience:
     label: "Years of Experience"
     prepend_value: ""

@@ -1,15 +1,15 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: "Unlocking Growth with Our Data-Driven Approach"
+title: " 为何选择MMC？"
 subtitle: "How It Works"
 bg_pattern_image: "/images/line-pattern.svg"
 
 list:
-  - title: "Deep Dive - Market & Competitive Analysis"
+  - title: "利润导向，财务视角"
     description: |
-      We begin by thoroughly analyzing your target market and understanding its size, demographics, trends, and growth potential.
-
-      We conduct a comprehensive competitive analysis to identify your key competitors, their strengths and weaknesses, and their market share.
+     区别于传统管理培训，
+    
+     我们一切决策回归财务本质，以终为始，直击利润增长核心。
     images:
       src:
         - "/images/how-it-works/1.png"
@@ -17,11 +17,12 @@ list:
       alt: "Image explaing Market & Competitive Analysis"
     number: "01"
 
-  - title: "Collaborative Strategy Session"
+  - title: "完整体系，无缝落地"
     description: |
-      We work closely with you to understand your business goals, vision, and resources.
+      提供从顶层战略到基层执行的闭环管理工具与方法，
+      
 
-      Leveraging the insights from the market and competitive analysis, we facilitate a collaborative workshop to brainstorm and develop winning strategies.
+      确保预算‘不只是纸上谈兵’,++++++
     images:
       src:
         - "/images/how-it-works/2.png"
@@ -29,25 +30,26 @@ list:
       alt: "Image explaing Market & Competitive Analysis"
     number: "02"
 
-  - title: "Crafting Your Action Plan"
+  - title: "实战专家，经验证模式"
     description: |
-      Based on the collaborative session, we translate strategies into a clear and actionable roadmap.
+      融合创始人Spark Liang多年实战经验与25年财务规划底蕴，
 
-      This plan outlines specific steps, timelines, and performance metrics to track progress.
+      提供真正‘可落地、见实效’的解决方案。
     images:
       src:
         - "/images/how-it-works/3.png"
       background: "/images/how-it-works/bg.svg"
       alt: "Image explaing Market & Competitive Analysis"
     number: "03"
-  - title: "一加一"
+    
+  - title: " 专注中大，高端定制"
     description: |
-      Based on the collaborative session, we translate strategies into a clear and actionable roadmap.
+      聚焦年收入千万级以上企业痛点，
 
-      This plan outlines specific steps, timelines, and performance metrics to track progress.
+      提供高价值、定制化的深度服务，而非标准化快餐。
     images:
       src:
-        - "/images/how-it-works/Iamastro.png"
+        - "/images/how-it-works/3.png"
       background: "/images/how-it-works/bg.svg"
       alt: "Image explaing Market & Competitive Analysis"
     number: "04"

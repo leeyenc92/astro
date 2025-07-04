@@ -12,9 +12,9 @@ marquee:
   duration: "50s"
 
 list:
-  - "/images/about-us/1.jpg"
-  - "/images/about-us/2.jpg"
-  - "/images/about-us/3.jpg"
-  - "/images/about-us/4.jpg"
-  - "/images/about-us/5.jpg"
+  - "/images/about-us/jing er.jpg"
+  - "/images/about-us/zoe.jpg"
+  - "/images/about-us/kaelyn.jpg"
+  - "/images/about-us/spark1.jpg"
+  - "/images/about-us/summer.jpg"
 ---

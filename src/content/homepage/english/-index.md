@@ -1,13 +1,13 @@
 ---
-title: "Home"
+title: ""
 meta_description: "This is a example description"
 
 # Override Default Content of `/sections/services-section.md`
 # Uncomment key values that you wan to override
 services_section:
   # enable: true # Control the visibility of this section across all services single
-  title: "Additional Services to Maximize Your Business Potential"
-  # subtitle: "Our Services"
+  title: "我们的核心服务"
+  # subtitle: "我们的服务"
 
   creative_shape: # Background shape
     enable: true
