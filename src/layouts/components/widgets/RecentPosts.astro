@@ -1,0 +1,49 @@
+---
+import BlogCard from "../cards/BlogCard.astro";
+import { useTranslations } from "@/lib/utils/languageParser";
+import fetchApi from "@/lib/utils/fetchApi";
+import resolveImageUrl from "@/lib/utils/resolveImageUrl";
+import type { Post, StrapiResponse } from "@/types";
+
+interface Props {
+  class?: string;
+}
+
+const { data } = await fetchApi<StrapiResponse<Post[]>>({
+  endpoint: "posts",
+  query: {
+    "populate[coverImage][populate]": true,
+    "populate": "categories",
+    "sort": "publishedAt:desc",
+  },
+});
+
+const posts = data.map((post) => ({
+  title: post.title,
+  slug: post.slug,
+  collection: "blog",
+  date: new Date(post.publishedAt).toISOString(),
+  image: resolveImageUrl(post.coverImage),
+  categories: post.categories?.map((cat) => cat.name) || [],
+})).slice(0, 3);
+
+const t = await useTranslations(Astro.currentLocale as string);
+---
+
+{
+  posts && posts.length > 0 && (
+    <div class="space-y-4">
+      <h2 class="text-h5 border-border-default/50 mb-4 border-b pb-4">
+        {t("widgets.recent_posts_title")}
+      </h2>
+      <div class="space-y-3">
+        {posts.map((post) => (
+          <BlogCard
+            content={{ ...post, slug: post.slug }}
+            options={{ card: { layout: "horizontal" } }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
