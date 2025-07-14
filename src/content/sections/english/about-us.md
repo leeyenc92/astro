@@ -1,6 +1,6 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: 我们的使命是帮助企业实现收入利润双增长"
+title: 我们的使命是帮助企业实现收入利润双增长
 cta_btn:
   enable: true
   label: "Learn More About Us"

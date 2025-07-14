@@ -173,7 +173,7 @@ header {
   /* Show main logo in home page and alternate logo in other pages */
   &.header-dark {
     .logo {
-      @apply inline-block;
+      @apply hidden;
     }
 
     .logo-text {
@@ -181,7 +181,7 @@ header {
     }
 
     .logo-alternate {
-      @apply hidden;
+      @apply inline-block;
     }
   }
 }
