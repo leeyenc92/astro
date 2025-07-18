@@ -1,0 +1,108 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+interface InlineSvgProps {
+  src: string;
+  inlineSvg: true;
+  alt?: string;
+  width?: string;
+  height?: string;
+  class?: string;
+  style?: any;
+  [key: string]: any;
+}
+
+interface ImageProps {
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  layout?: "responsive" | "full-width" | "none" | undefined;
+  loading?: "eager" | "lazy" | null | undefined;
+  decoding?: "async" | "auto" | "sync" | null | undefined;
+  formats?: string[] | "auto" | "avif" | "jpeg" | "png" | "svg" | "webp";
+  class?: string;
+  style?: any;
+  [key: string]: any;
+}
+
+type Props = InlineSvgProps | ImageProps;
+
+let {
+  src,
+  alt,
+  inlineSvg,
+  width,
+  height,
+  loading,
+  decoding,
+  formats,
+  style,
+  ...rest
+} = Astro.props;
+
+// Detect remote images (http/https)
+const isRemote = src.startsWith("http");
+
+// Prepare local paths
+const localSrc = `/src/assets${src}`;
+const images = import.meta.glob("/src/assets/images/**/*.{jpeg,jpg,png,webp,svg,gif}");
+const rawSvgs = import.meta.glob("/src/assets/images/**/*.svg", { query: "raw", import: "default" });
+
+const isValidLocal = images[localSrc] !== undefined;
+const localImage = isValidLocal ? (await images[localSrc]()) as { default: ImageMetadata } : null;
+
+// Fix formats type to always be string or array
+const normalizedFormats = Array.isArray(formats) ? formats : formats ? [formats] : ["auto"];
+
+
+let SVG;
+if (inlineSvg && src.includes(".svg") && !isRemote) {
+  SVG = (await rawSvgs[localSrc]()) as string;
+  if (SVG) {
+    SVG = SVG.split("<svg");
+    if (SVG.length > 1) {
+      const attributes = Object.entries(rest)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(" ");
+      SVG[1] = ` data-icon="true" ${attributes} ${SVG[1]}`;
+    }
+    SVG = SVG.join("<svg");
+  }
+}
+---
+
+{inlineSvg && SVG ? (
+  <Fragment set:html={SVG} />
+) : isRemote ? (
+  <img
+    src={src}
+    alt={alt || ""}
+    width={typeof width === "string" ? parseInt(width, 10) : width}
+    height={typeof height === "string" ? parseInt(height, 10) : height}
+    loading={loading}
+    decoding={decoding}
+    class={Astro.props.class}
+    style={style}
+    {...rest}
+  />
+) : isValidLocal && localImage ? (
+  <>
+    {/* @ts-expect-error Astro's Image expects static src, but we use dynamic */}
+    <Image
+      src={localImage.default}
+      alt={alt || ""}
+      width={typeof width === "string" ? parseInt(width, 10) : width}
+      height={typeof height === "string" ? parseInt(height, 10) : height}
+      formats={formats}
+      loading={loading}
+      decoding={decoding}
+      class={Astro.props.class}
+      style={style}
+      {...rest}
+    />
+  </>
+) : (
+  <div style="color: red;">Image not found: {src}</div>
+)}

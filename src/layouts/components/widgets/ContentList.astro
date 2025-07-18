@@ -1,0 +1,113 @@
+---
+import { getCollectionCTM } from "@/lib/contentParser.astro";
+import type { ContentListType } from "@/types";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import BlogCard from "@/components/cards/BlogCard.astro";
+import PortfolioCard from "@/components/cards/PortfolioCard.astro";
+import { recursiveCloneObject } from "@/lib/utils/objectFunctions";
+import Pagination from "@/components/widgets/Pagination.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+
+const config = parseTomlToJson("./src/config/config.toml");
+
+type Props = {
+  class?: string;
+  hasSearch?: boolean;
+  pagination?: {
+    enable: boolean;
+    currentPage: number;
+    totalPages?: number;
+  };
+  filter?: {
+    category?: {
+      name: string;
+      slug: string;
+    };
+  }; // show filtered content list based on provided taxonomy
+  options?: ContentListType;
+  [key: string]: any;
+};
+
+const { class: className, pagination, filter, options, items = [], ...rest } = Astro.props;
+let { content, layout, gap = "gap-6", columns = 3 } = options || {};
+
+let list: any[] = [];
+let totalPages = 1;
+
+if (content === "portfolio") {
+  list = await getCollectionCTM(config.settings.portfolio_folder, Astro.currentLocale);
+} else if (content === "blog") {
+  list = items;
+  totalPages = pagination?.totalPages ?? 1;
+}
+
+if (filter?.category) {
+  list = list.filter((item) => item.data.categories.includes(filter.category?.name));
+}
+
+list = sortByDate(list);
+---
+
+{list && list.length > 0 ? (
+  <>
+    <div
+      class:list={[
+        "blog-search-results",
+        className,
+        { "gap-6": gap === "gap-6" },
+        { "gap-8": gap === "gap-8" },
+        "gap-y-10",
+        {
+          "grid grid-cols-1": layout === "grid" && columns === 1,
+          "grid md:grid-cols-2": layout === "grid" && columns === 2,
+          "grid md:grid-cols-2 lg:grid-cols-3": layout === "grid" && columns === 3,
+        },
+        {
+          "break-inside-avoid-column": layout === "masonry",
+          "md:columns-1": layout === "masonry" && columns === 1,
+          "md:columns-2": layout === "masonry" && columns === 2,
+          "md:columns-2 lg:columns-3": layout === "masonry" && columns === 3,
+        },
+      ]}
+      {...rest}
+    >
+      {list.map((item) =>
+        content === "blog" ? (
+          <BlogCard
+            class:list={[
+              {
+                "mb-6": gap === "gap-6" && layout === "masonry",
+                "mb-8": gap === "gap-8" && layout === "masonry",
+              },
+            ]}
+            content={{ ...item.data, ...item, slug: item.slug }}
+            options={recursiveCloneObject(options)}
+          />
+        ) : content === "portfolio" ? (
+          <PortfolioCard
+            class:list={[
+              {
+                "mb-6": gap === "gap-6" && layout === "masonry",
+                "mb-8": gap === "gap-8" && layout === "masonry",
+                "break-inside-avoid-column": layout === "masonry",
+              },
+            ]}
+            content={{ ...item.data, slug: item.slug, ...item }}
+            options={recursiveCloneObject(options)}
+          />
+        ) : null
+      )}
+    </div>
+    {content === "blog" && pagination?.enable && (
+      <Pagination class="pt-8" collection="blog" currentPage={pagination?.currentPage || 1} totalPages={totalPages} />
+    )}
+  </>
+) : (
+<div class="flex flex-col items-center justify-center py-20 text-gray-500">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 0a2 2 0 100-4H7a2 2 0 100 4h10zm-6 4h6m2 0a2 2 0 100-4H7a2 2 0 100 4h10z" />
+  </svg>
+  <p class="text-lg font-semibold">No entries found</p>
+  <p class="text-sm text-gray-400 mt-2">Please check back later.</p>
+</div>
+)}
