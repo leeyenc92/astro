@@ -1,7 +1,7 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: "What They Say About Our Company"
-subtitle: "Testimonial"
+title: "见证卓越口碑"
+subtitle: "客户见证 "
 
 cta_btn:
   enable: true

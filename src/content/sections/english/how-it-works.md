@@ -1,7 +1,7 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
-title: "<h2 style=\"color: #002528; font-size: 1.5rem; white-space: nowrap;\">**MMC 的 Profit OS™: 利润增长四步法**</h2>"
-subtitle: "How It Works"
+title: "<h2 style=\"color: #002528; font-size: 1.5rem; white-space: nowrap;\">**MMC利润增长四步法**</h2>"
+subtitle: "我们的方法论"
 bg_pattern_image: "/images/line-pattern.svg"
 
 list:

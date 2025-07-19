@@ -20,10 +20,10 @@ right_content: "image" # Choose between "image" or "stats" for the content of th
 image_block:
   image: "/images/call-to-action/sparkliang.png"
   experience:
-    label: "Years of Experience"
+    label: "验证方法论"
     prepend_value: ""
-    value: "12"
-    append_value: "+"
+    value: "18"
+    append_value: "<small><small>年+</small></small>"
 
 stats_block:
   list:

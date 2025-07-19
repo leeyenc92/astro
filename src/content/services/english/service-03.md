@@ -1,5 +1,5 @@
 ---
-title: "课程培训 (Training Courses)"
+title: "课程培训 <small>(Training Courses)</small>"
 description: "通过科学的预算制定和资金管理方法，帮助企业提升利润并实现战略目标。"
 
 image: "/images/services/7.jpg"

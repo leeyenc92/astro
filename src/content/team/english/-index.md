@@ -41,40 +41,9 @@ leadership_team:
   limit: 3 # false / number
 
 members:
-  - image: "/images/team/1.jpg"
-    name: "Sarah Johnson"
-    role: "CEO & Founder"
-    leadership_team: true
-    social:
-      enable: true
-      list:
-        - enable: true
-          label: "Linkedin"
-          icon: "/images/icons/svg/linkedin.svg"
-          url: "https://www.linkedin.com/"
-        - enable: true
-          label: "x-twitter"
-          icon: "/images/icons/svg/twitter.svg"
-          url: "https://twitter.com/"
-  - image: "/images/team/2.jpg"
-    name: "Jane Smith"
-    role: "Chief Financial Officer"
-    leadership_team: true
-    social:
-      enable: true
-      list:
-        - enable: true
-          label: "Linkedin"
-          icon: "/images/icons/svg/linkedin.svg"
-          url: "https://www.linkedin.com/"
-        - enable: true
-          label: "x-twitter"
-          icon: "/images/icons/svg/twitter.svg"
-          url: "https://twitter.com/"
-  - image: "/images/team/3.jpg"
-    name: "Robert Brown"
-    role: "Chief Operating Officer"
-    leadership_team: true
+  - image: "/images/team/Spark 2.jpg"
+    name: "Spark Liang"
+    role: "Managing Director"
     social:
       enable: true
       list:
@@ -87,7 +56,7 @@ members:
           icon: "/images/icons/svg/twitter.svg"
           url: "https://twitter.com/"
   - image: "/images/team/summer 1.jpg"
-    name: " Summer Oh"
+    name: "Summer Oh"
     role: "Operation Manager"
     social:
       enable: true
@@ -100,9 +69,9 @@ members:
           label: "x-twitter"
           icon: "/images/icons/svg/twitter.svg"
           url: "https://twitter.com/"
-  - image: "/images/team/Spark 2.jpg"
-    name: "Spark Liang"
-    role: "Managing Director"
+  - image: "/images/team/jinger.jpg"
+    name: "Jing Er Lim"
+    role: "Business Development Manager"
     social:
       enable: true
       list:
@@ -129,6 +98,8 @@ members:
           icon: "/images/icons/svg/twitter.svg"
           url: "https://twitter.com/"
 
+# call to action
+call_to_action:
   - image: "/images/team/jinger.jpg"
     name: "Jing Er Lim"
     role: "Business Development Manager"

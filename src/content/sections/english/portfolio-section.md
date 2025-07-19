@@ -6,12 +6,12 @@ filter:
   layout: "classic" # "classic" | "boxed" | "modern"
 
 head:
-  title: "Success Stories: How We Helped Businesses Thrive"
-  subtitle: "Case Studies"
+  title: "我们如何助力企业实现卓越增长"
+  subtitle: "成功案例"
 
   cta_btn:
     enable: true
-    label: "See All Case Studies"
+    label: "探索更多案例"
     url: "/case-studies"
     rel: ""
     target: ""

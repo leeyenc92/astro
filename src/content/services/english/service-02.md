@@ -1,9 +1,9 @@
 ---
-title: "企业咨询服务 (Consulting Services)"
-description: "通过量身定制并与您的高管团队紧密合作，帮助企业将理论转化为实际操作。"
+title: "企业内训 <small>(Corporate Training)</small>"
+description: "定制符合公司文化和战略的培训课程，提升团队的执行力与管理能力。"
 
-image: "/images/services/8.jpg"
-icon: "/images/icons/svg/services/leader-board.svg"
+image: "/images/services/9.jpg"
+icon: "/images/icons/svg/services/infographic.svg"
 
 # Short intro about this service
 intro:

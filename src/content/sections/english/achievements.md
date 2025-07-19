@@ -1,7 +1,7 @@
 ---
 enable: true # Control the visibility of this section across all pages where it is used
 title: "用数字驱动增长，用系统锁定利润"
-subtitle: "Achievements"
+subtitle: "我们的理念"
 description: |
   我们坚信，每一个伟大的商业决策，都源于科学的测算而非模糊的感觉。我们的专家团队，依托超过18年的持牌经验，为您带来的不仅是跨行业的深刻洞见，更是一套经过500家企业验证的、可落地的利润增长系统。
 
