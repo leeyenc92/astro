@@ -1,0 +1,115 @@
+<svg width="193" height="230" viewBox="0 0 193 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_121_1941)">
+    <g opacity="0.5">
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 173 -50.4824)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 233 69.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 173 29.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 233 149.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 173 109.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 89.7969 -50.4824)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 89.7969 29.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 29.7969 -10.4824)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 149.797 69.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 89.7969 29.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 89.7969 109.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 29.7969 69.5176)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 149.797 149.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 89.7969 109.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="90" y2="-0.25"
+        transform="matrix(-1 8.74228e-08 8.74228e-08 1 89.7969 189.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+      <line y1="-0.25" x2="80" y2="-0.25"
+        transform="matrix(4.37114e-08 1 1 -4.37114e-08 29.7969 149.518)" stroke="#2562FF"
+        stroke-width="0.5" />
+    </g>
+  </g>
+  <defs>
+    <clipPath id="clip0_121_1941">
+      <rect width="193" height="230" fill="white" transform="matrix(-1 0 0 -1 193 230)" />
+    </clipPath>
+  </defs>
+</svg>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 193 230">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0, .st1, .st2 {
+        fill: none;
+      }
+
+      .st1 {
+        stroke-miterlimit: 4;
+        stroke-width: .5px;
+      }
+
+      .st1, .st2 {
+        stroke: #b5a280;
+      }
+
+      .st3 {
+        opacity: .5;
+      }
+
+      .st2 {
+        stroke-width: .5px;
+      }
+
+      .st4 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="193" height="230"/>
+    </clipPath>
+  </defs>
+  <g class="st4">
+    <g class="st3">
+      <line class="st1" x1="172.8" y1="-50.5" x2="172.8" y2="29.5"/>
+      <line class="st2" x1="233" y1="69.3" x2="143" y2="69.3"/>
+      <line class="st1" x1="172.8" y1="29.5" x2="172.8" y2="109.5"/>
+      <line class="st2" x1="233" y1="149.3" x2="143" y2="149.3"/>
+      <line class="st1" x1="172.8" y1="109.5" x2="172.8" y2="189.5"/>
+      <line class="st1" x1="89.5" y1="-50.5" x2="89.5" y2="29.5"/>
+      <line class="st2" x1="89.8" y1="29.3" x2="-.2" y2="29.3"/>
+      <line class="st1" x1="29.5" y1="-10.5" x2="29.5" y2="69.5"/>
+      <line class="st2" x1="149.8" y1="69.3" x2="59.8" y2="69.3"/>
+      <line class="st1" x1="89.5" y1="29.5" x2="89.5" y2="109.5"/>
+      <line class="st2" x1="89.8" y1="109.3" x2="-.2" y2="109.3"/>
+      <line class="st1" x1="29.5" y1="69.5" x2="29.5" y2="149.5"/>
+      <line class="st2" x1="149.8" y1="149.3" x2="59.8" y2="149.3"/>
+      <line class="st1" x1="89.5" y1="109.5" x2="89.5" y2="189.5"/>
+      <line class="st2" x1="89.8" y1="189.3" x2="-.2" y2="189.3"/>
+      <line class="st1" x1="29.5" y1="149.5" x2="29.5" y2="229.5"/>
+    </g>
+  </g>
+</svg>
